@@ -298,9 +298,9 @@ int main(int argc,char *argv[]){
     showSymbolsTable();
     showStringsTable();
     printf("\n\n");
-    //free(tokens);
-    //free (symbols);
-    //free(strings);
+    free(tokens);
+    free (symbols);
+    free(strings);
     fclose(archivo_fuente);
     return 0;
 }

@@ -436,7 +436,7 @@ nument {dignz}?{dig}*
 . {unrecogHandler(yytext);}
 %%
 int main(int argc,char *argv[]){
-    FILE *archivo_fuente = fopen(argv[1],"r");
+    FILE *archivo_fuente = fopen("fuente.txt","r");
     if (!archivo_fuente)
        printf("No se pudo cargar el archivo\n");
     yyin = archivo_fuente;
