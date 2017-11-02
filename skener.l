@@ -318,7 +318,6 @@ void insertString(char *str){
 
 void showStringsTable(){
     int i = 0,j = 0;
-    *strings = 1;
     FILE *fichier = fopen("StringsTable.txt","w");
     printf("\n----------------\nTABLA DE CADENAS\n----------------\n");
  
@@ -346,7 +345,6 @@ void showStringsTable(){
 
 void showSymbolsTable(){
     int i = 0,j = 0;
-    *symbols = 1;
     FILE *fichier = fopen("SymbolsTable.txt","w");
     printf("\n-----------------\nTABLA DE SIMBOLOS\n-----------------\n");
     for (i = 0;i < symbolsLength; i++){
