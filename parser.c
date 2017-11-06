@@ -55,21 +55,5 @@ void replace(char *cadena){
 }
 
 int main(){
-	int i = 0;
-
-	push("hola");
-	push("me");
-	push("llamo");
-	push("Noe");
-
-	for (i = 0; i < tos; i++)
-		printf("%c\n",(int) *(stack + i));
-
-	replace("TL");
-
-	printf("\n\n\n\n\n\n\n\n");
-
-	for (i = 0; i < tos; i++)
-		printf("%c\n",(int) *(stack + i));
-\
+	
 }
