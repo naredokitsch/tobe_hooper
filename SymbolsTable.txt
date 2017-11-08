@@ -1,1 +1,5 @@
 0 simbolo
+1 unosimbolo
+2 uno
+3 tsimbolo
+4 siete

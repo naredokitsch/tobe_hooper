@@ -2,7 +2,10 @@
 #include <stdlib.h>
 
 float *stack = NULL;
-int tos = 0;
+int tos = 0; //valor real tos - 1
+float atomsTable[] = {'a','+','(','a','*','a',')'};
+int atomsLength = 7;
+int atomsIndex = 0;
 
 void push_one(float atom){
    if (tos == 0){
@@ -11,8 +14,7 @@ void push_one(float atom){
             printf("Problems creating the stack (calloc)\n");
       tos++;
       *(stack) = atom;
-   }
-   else{ 
+   }else{ 
       tos++;
       float *chk = (float*) realloc(stack, tos * sizeof(*chk));
       if (!chk)
@@ -41,7 +43,6 @@ char *reverse(char *cadena){
 	return tmp;
 }
 
-
 void push(char *cadena){
 	int i = 0;
 	char *andeac = reverse(cadena);
@@ -54,6 +55,48 @@ void replace(char *cadena){
 	push(cadena);
 }
 
+void move_pop(){
+	pop();
+	atomsIndex++;
+}
+
+void move_replace(char *cadena){
+	replace(cadena);
+	atomsIndex++;
+}
+
+void imprimir(){
+	int i = 0;
+
+	printf("STACK:\n");
+	for(i = 0; i < tos; i++)
+		printf("%c",(int) *(stack + i));
+	printf("\nATOMS:\n");
+	for(i = atomsIndex; i < atomsLength; i++)
+		printf("%c",(int) *(atomsTable + i));
+	printf("\n\n\n");
+}
+
 int main(){
-	
+
+	push("hola");
+	push("me");
+	push("llamo");
+	push("Noe");
+
+	imprimir();
+
+	pop();
+	imprimir();
+	replace("TE");
+	imprimir();
+	move_replace("FG");
+	imprimir();
+	move_replace("$&#");
+	imprimir();
+
+
+
+
+
 }

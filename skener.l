@@ -12,7 +12,7 @@ los archivos correspondientes de cada tabla.
 Autor: Noe Martinez Naredo
 septiembre 2017
 version 0.0
- 
+
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,24 +24,56 @@ int symQuantity = 0;
 int stringsLength = 0;
 int *strings = NULL;   
 int strQuantity = 0;
+int *atoms = NULL;   
+int atomsLength = 0;
+int atomsIndex = 0;
+float tokens_0 = 0;
+int atoms_0 = 0;
 
-void insertToken(float clase,float tok){
+void insertToken(float clase,float tok){	 
     if (tokensLength == 0){
-       tokens = (float*) calloc(2 , sizeof(float));
+    	 tokens_0 = clase;
+       tokens = (float*) calloc(2 , sizeof(*tokens));
           if (!tokens)
               printf("Problems creating Token Table  (calloc)\n");
-       tokensLength += 2;
        *(tokens) = clase;
        *(tokens + 1) = tok;
-    }
-    else{ 
        tokensLength += 2;
-       float *chk = (float*) realloc(tokens,tokensLength * sizeof(float));
+       
+    }
+    else{
+       tokensLength += 2;
+       float *chk = (float *) realloc(tokens,tokensLength * sizeof(*chk));
        if (!chk)
           printf("Problems Moving Token Table (realloc)\n");
        tokens = chk;
        *(tokens + (tokensLength - 2)) = clase;
        *(tokens + (tokensLength - 1)) = tok;
+       *tokens = tokens_0;
+    }
+}
+
+
+void insertAtom(int atm){
+	 
+	 printf("atoms_0 = %c\n", atoms_0);
+
+    if (atomsLength == 0){
+    	 atoms_0 = atm;
+       atoms = (int*) calloc(1 , sizeof(*atoms));
+          if (!atoms)
+              printf("Problems creating Atom Table  (calloc)\n");
+       *(tokens) = atm;
+       atomsLength++;
+    }
+    else{ 
+       atomsLength++;
+       int *chk = (int*) realloc(atoms,atomsLength * sizeof(*chk));
+       if (!chk)
+          printf("Problems Moving Atom Table (realloc)\n");
+       atoms = chk;
+       *(atoms + (atomsLength - 1)) = atm;
+       *atoms = atoms_0;
     }
 }
 
@@ -62,18 +94,22 @@ void operadorAritmetico(char *op){
     char multiplica[] = {'M','U','L','T','I','P','L','I','C','A','\0'};
     if (compara(op,divide)){
         insertToken(4,0);
+        insertAtom('/');
         return;
        }
     if (compara(op,mas)){
         insertToken(4,1);
+        insertAtom('+');
         return;
        }
     if (compara(op,menos)){
         insertToken(4,2);
+        insertAtom('-');
         return;
        }
     if (compara(op,multiplica)){
         insertToken(4,3);
+        insertAtom('*');
         return;
        }
     return;
@@ -88,26 +124,32 @@ void operadorRelacional(char *op){
     char noigual[] = {'!','=','\0'};
     if (compara(op,masque)){
         insertToken(3,0);
+        insertAtom('>');
         return;
        }
     if (compara(op,masoigualque)){
         insertToken(3,1);
+        insertAtom('g');
         return;
        }
     if (compara(op,menosque)){
         insertToken(3,2);
+        insertAtom('<');
         return;
        }
     if (compara(op,menosoigualque)){
         insertToken(3,3);
+        insertAtom('p');
         return;
        }
     if (compara(op,igual)){
         insertToken(3,4);
+        insertAtom('q');
         return;
        }
     if (compara(op,noigual)){
         insertToken(3,5);
+        insertAtom('!');
         return;
        }
     return;
@@ -124,34 +166,42 @@ void palabraReservada(char *op){
     char sino[] = {'S','I','N','O','\0'};
     if (compara(op,ent)){
         insertToken(1,0);
+        insertAtom('t');
         return;
        }
     if (compara(op,escribe)){
         insertToken(1,1);
+        insertAtom('w');
         return;
        }
     if (compara(op,haz)){
         insertToken(1,2);
+        insertAtom('h');
         return;
        }
     if (compara(op,lee)){
         insertToken(1,3);
+        insertAtom('l');
         return;
        }
     if (compara(op,mientras)){
         insertToken(1,4);
+        insertAtom('m');
         return;
        }
     if (compara(op,real)){
         insertToken(1,5);
+        insertAtom('r');
         return;
        }
     if (compara(op,si)){
         insertToken(1,6);
+        insertAtom('i');
         return;
        }
     if (compara(op,sino)){
         insertToken(1,7);
+        insertAtom('e');
         return;
        }
     return;
@@ -162,7 +212,7 @@ int *makeSymbolPointer(char *sym){
     int symLength = 0;
     int *tmp = NULL;
     do{}while(*(sym + (symLength++)) != '\0');
-    tmp = calloc(++symLength, sizeof(int));
+    tmp = calloc(++symLength, sizeof(*tmp));
        if (!tmp)
           printf("Problems Creating Pointer to Symbol (calloc)\n");
     *tmp = (symQuantity + 1);
@@ -213,7 +263,7 @@ void insertSymbol(char *sym){
     if (okInsertSymbol(tmp)){
         do{}while(*(tmp + (tmpLength++)) != '\0');
         if (symQuantity == 0){
-            symbols = (int*) calloc(tmpLength, sizeof(int));
+            symbols = (int*) calloc(tmpLength, sizeof(*symbols));
            if (!symbols)
                printf("Problems Creating Symbol Table (calloc)\n");
             symbolsLength += tmpLength;
@@ -221,7 +271,7 @@ void insertSymbol(char *sym){
         }
         else{ 
             
-            int *chk = realloc(symbols,(symbolsLength + tmpLength) * sizeof(int));
+            int *chk = realloc(symbols,(symbolsLength + tmpLength) * sizeof(*chk));
             if (!chk)
                printf("Problems moving Symbol Table (realloc)\n");
             symbols = chk;
@@ -293,14 +343,14 @@ void insertString(char *str){
     if (okInsertString(tmp)){
         do{}while(*(tmp + (tmpLength++)) != '\0');
         if (strQuantity == 0){
-            strings = (int*) calloc(tmpLength, sizeof(int));
+            strings = (int*) calloc(tmpLength, sizeof(*strings));
             if (!strings)
                 printf("Problems Meking Strings Table (calloc)\n");
             stringsLength += tmpLength;
             strings = tmp;
         }
         else{ 
-            int *chk = realloc(strings,(stringsLength + tmpLength) * sizeof(int));
+            int *chk = realloc(strings,(stringsLength + tmpLength) * sizeof(*chk));
             if (!chk)
                printf("Problems Moving String Table (realloc)\n");
             strings = chk;
@@ -387,6 +437,18 @@ void showTokenTable(){
     fclose(fichier);
 }
 
+void showAtomsTable(){
+   int i;
+   FILE *fichier = fopen("AtomsTable.txt","w");
+   printf("\n\n---------------\nTABLA DE ATOMOS\n---------------\n");
+   for (i = 0; i < atomsLength; i++){
+     printf("%c\n",(int)*(atoms + i));
+     fprintf(fichier,"%c\n",(int)*(atoms + i));
+   }
+
+   fclose(fichier);
+}
+
 void comment(char *comm){
 //int i = 0;
 //printf("COMMENT : ");
@@ -397,12 +459,12 @@ void comment(char *comm){
 }
 
 void unrecogHandler(char *comm){
-int i = 0;
-printf("NO SE RECONOCE : ");
-do{
-    printf("%c",*(comm + i));
-}while (*(comm + (i++)) != '\0');
-printf("\n");
+//int i = 0;
+//printf("NO SE RECONOCE : ");
+//do{
+//    printf("%c",*(comm + i));
+//}while (*(comm + (i++)) != '\0');
+//printf("\n");
 }
 
 %}
@@ -422,15 +484,15 @@ nument {dignz}?{dig}*
 
 %%
 {comentario} {comment(yytext);}
-{cadena} {insertString(yytext);}
-{simbolo} {insertSymbol(yytext);}
+{cadena} {insertString(yytext); insertAtom('s');}
+{simbolo} {insertSymbol(yytext); insertAtom('a');}
 {oprel} {operadorRelacional(yytext);}
-{opasig} {insertToken(2,'=');}
-{simbesp} {insertToken(5,*(yytext));}
+{opasig} {insertToken(2,'='); insertAtom('=');}
+{simbesp} {insertToken(5,*(yytext)); insertAtom(*(yytext));}
 {oparit} {operadorAritmetico(yytext);}
 {reservadas} {palabraReservada(yytext);}
-{numreal} {insertToken(7,atof(yytext));}
-{nument} {insertToken(6,atoi(yytext));}
+{numreal} {insertToken(7,atof(yytext)); insertAtom('n');}
+{nument} {insertToken(6,atoi(yytext)); insertAtom('c');}
 . {unrecogHandler(yytext);}
 %%
 int main(int argc,char *argv[]){
@@ -439,6 +501,7 @@ int main(int argc,char *argv[]){
        printf("No se pudo cargar el archivo\n");
     yyin = archivo_fuente;
     yylex();
+    showAtomsTable();
     showTokenTable();
     showSymbolsTable();
     showStringsTable();

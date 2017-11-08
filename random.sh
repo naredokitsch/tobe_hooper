@@ -1,4 +1,4 @@
-#!/bin/bash
+	#!/bin/bash
 
 a=$1
 
@@ -42,7 +42,7 @@ arr[34]=salto
 rand=$[$RANDOM % ${#arr[@]}]
 last=${arr[$rand]}
 
-while [ $a -gt 0 ]
+while [ "$a" -ne 0 ]
 do
     rand=$[$RANDOM % ${#arr[@]}]
     last=$last${arr[$rand]}
@@ -51,6 +51,6 @@ done
 
 echo $last > fuente.txt
 
-sed -i 's/salto/\n/g' fuente.txt
-sed -i 's/tabulador/\t/g' fuente.txt
+sed -ie 's/salto/'$'/g' fuente.txt
+sed -ie 's/tabulador/'\t'/g' fuente.txt
 
