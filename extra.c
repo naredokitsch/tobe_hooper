@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-char atoms[] = {'(','a','+','a',')','*','(','a','-','a',')','\0'};//,'>','a',')','[','a','=','n',';',']','e','[','a','=','n',';',']','\0'};
+char *atoms;//[] = {'(','a','+','a',')','*','(','a','-','a',')','\0'};//,'>','a',')','[','a','=','n',';',']','e','[','a','=','n',';',']','\0'};
 int indx = 0, correct = 1;
 
 void F();
@@ -9,6 +9,7 @@ void E();
 void E_();
 void T();
 void T_();
+void getAtoms();
 
 ////////////////////////////////////////////////////////////////////////////////////////
 void E(){/*
@@ -30,20 +31,20 @@ void E_(){
 		printf("\$  ->  E'\n",actChar);
 	else
 		printf("%c  ->  E'\n",actChar);
-
 	*/
+	
 	if ((actChar == '+') || (actChar == '-')){
 
 		indx++;
 
 		T();
 		E_();
-
+		
 		if (actChar == '+')
 			printf("+");
 		else
 			printf("-");
-
+		
 		return;
 	}else{}
 }
@@ -61,8 +62,8 @@ void T(){/*
 void T_(){
 
 	char actChar = *(atoms + indx);
-
 	/*
+	
 	if (actChar == '\0')
 		printf("\$  ->  T'\n",actChar);
 	else
@@ -75,12 +76,12 @@ void T_(){
 
 		F();
 		T_();
-
+		
 		if (actChar == '*')
 			printf("*");
 		else
 			printf("/");
-
+		
 		return;
 	}else{}
 }
@@ -90,9 +91,9 @@ void F(){/*
 		printf("\$  ->  F\n",*(atoms + indx));
 	else
 		printf("%c  ->  F\n",*(atoms + indx));
-	*/
+		*/
 	if ((*(atoms + indx) == 'a') || (*(atoms + indx) == 'n') || (*(atoms + indx) == 'c')){
-
+		
 		if (*(atoms + indx) == 'a')
 			printf("a");
 		else {
@@ -120,7 +121,35 @@ void F(){/*
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 
+void getAtoms(){
+	char tmp;
+	printf("INTRODUCIR UNA EXPRESION ARITMETICA\n"); 
+	do{
+    		if (indx == 0){
+       			atoms = (char*) calloc(1, sizeof(*atoms));
+          		if (!atoms)
+              			printf("Problems(calloc)\n");
+			indx++;
+       			scanf("%c",&tmp);
+			*(atoms + indx -1) = tmp;
+			
+    		}else{ 
+       			indx++;
+       			char *chk = (char*) realloc(atoms,indx * sizeof(*atoms));
+       			if (!chk)
+          			printf("Problems(realloc)\n");
+       			atoms = chk;
+			scanf("%c",&tmp);
+			*(atoms + indx -1) = tmp;
+		}		
+	}while(atoms[indx - 1] != '\n');
+	atoms[indx - 1] = '\0';
+
+	indx = 0;
+}
+
 int main(){
+	getAtoms();
 	E();
 
 	if (correct == 1)
