@@ -1,7 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-char atoms[] = {'i','(','a','>','a',')','[','a','=','n',';',']','e','[','a','=','n',';',']','\0'};
+int atoms[] = {'t','a','(','t','a',')','[',
+							't','a',',','a','=','n',';',
+							'r','a','=','n',',','a',';',
+							'i','(','a','>','a',')','[',
+									'a','=','n',';',
+							']','e','[',
+									'a','=','n',';',
+							']',
+					']','\0'};
+
 int indx = 0;
 
 void F();
@@ -23,8 +32,171 @@ void BP();
 void PR();
 void PC();
 void S();
+void D();
+void L();
+void V();
+void C();
+void LD();
+void LA();
+void LAP();
+void FUN();
+void LF();
+void P();
 
 
+
+void parser (){
+	P();
+}
+///////////////////////////////////////////////////////////////////////////////////////
+void P(){
+	LF();
+}
+///////////////////////////////////////////////////////////////////////////////////////
+void LF(){
+	printf("<LF>\tindx -> %c\n",*(atoms + indx));
+	if ((*(atoms + indx) == 'a') || (*(atoms + indx) == 't') || (*(atoms + indx) == 'r')){
+		FUN();
+		LF();
+	}else{}
+}
+///////////////////////////////////////////////////////////////////////////////////////
+void FUN(){
+	printf("<FUN>\tindx -> %c\n",*(atoms + indx));
+	if ((*(atoms + indx) == 't') || (*(atoms + indx) == 'r')){
+		V();
+	}
+	if ((*(atoms + indx) == 'a') && (*(atoms + indx + 1) == '(')){
+		indx+=2;
+		LA();
+		if ((*(atoms + indx) == ')') && (*(atoms + indx + 1) == '[')){
+			indx+=2;
+			LD();
+			BP();
+			if (*(atoms + indx) == ']'){
+				indx++;
+				return;
+			}else{
+				printf("ERROR EN LA PRODUCCxfdsfION <FUN> : SIMBOLO = %c\n",*(atoms + indx));
+			}
+		}else{
+			printf("ERROR EN LA PRODUCCION <FUN> : SIMBOLO = %c\n",*(atoms + indx));	
+		}
+	}else{
+			printf("ERROR EN LA PRODUCCION <FUN> : SIMBOLO = %c\n",*(atoms + indx));
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+void LA(){
+	printf("<LA>\tindx -> %c\n",*(atoms + indx));
+	if ((*(atoms + indx) == 't') || (*(atoms + indx) == 'r')){
+		V();
+		if (*(atoms + indx) == 'a'){
+			indx++;
+			LAP();
+			return;
+		}else{
+			printf("ERROR EN LA PRODUCCION <LA> : SIMBOLO = %c\n",*(atoms + indx));
+		}
+	}
+	else{}
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void LAP(){
+	printf("<LAP>\tindx -> %c\n",*(atoms + indx));
+	if (*(atoms + indx) == ','){
+		indx++;
+		V();
+		if (*(atoms + indx) == 'a'){
+			indx++;
+			LAP();
+			return;
+		}else{
+			printf("ERROR EN LA PRODUCCION <LAP> : SIMBOLO = %c\n",*(atoms + indx));
+		}
+		return;
+	}
+	else{}
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void LD(){
+	printf("<LD>\tindx -> %c\n",*(atoms + indx));
+	if ((*(atoms + indx) == 't') || (*(atoms + indx) == 'r')){
+		D();
+		LD();
+		return;
+	}
+	else{}
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void D(){
+	printf("D\tindx -> %c\n",*(atoms + indx));
+	if ((*(atoms + indx) == 't') || (*(atoms + indx) == 'r')){
+		V();
+		if (*(atoms + indx) == 'a'){
+			indx++;
+			C();
+			L();
+			return;
+		}else{
+			printf("ERROR EN LA PRODUCCION D : SIMBOLO = %c\n",*(atoms + indx));
+		}
+	}
+	else{
+		printf("ERROR EN LA PRODUCCION D : SIMBOLO = %c\n",*(atoms + indx));
+	}
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void V(){
+	printf("V\tindx -> %c\n",*(atoms + indx));
+	if ((*(atoms + indx) == 't') || (*(atoms + indx) == 'r')){
+		indx++;
+		return;
+	}
+	else{
+		printf("ERROR EN LA PRODUCCION V : SIMBOLO = %c\n",*(atoms + indx));
+	}
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void N(){
+	printf("N\tindx -> %c\n",*(atoms + indx));
+	if ((*(atoms + indx) == 'n') || (*(atoms + indx) == 'c')){
+		indx++;
+		return;
+	}
+	else{
+		printf("ERROR EN LA PRODUCCION N : SIMBOLO = %c\n",*(atoms + indx));
+	}
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void C(){
+	printf("C\tindx -> %c\n",*(atoms + indx));
+	if (*(atoms + indx) == '='){
+		indx++;
+		N();
+		return;
+	}
+	else{}
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void L(){
+	printf("L\tindx -> %c\n",*(atoms + indx));
+	if ((*(atoms + indx) == ',') && (*(atoms + indx + 1) == 'a')){
+		indx+=2;
+		C();
+		L();
+		return;
+	}
+	if (*(atoms + indx) == ';'){
+		indx++;
+		return;
+	}
+	else{
+		printf("ERROR EN LA PRODUCCION L : SIMBOLO = %c\n",*(atoms + indx));
+	}
+}
+////////////////////////////////////////////////////////////////////////////////////////
 void BP(){
 	printf("<BP>\tindx -> %c\n",*(atoms + indx));
 	if ((*(atoms + indx) == 'a') || (*(atoms + indx) == 'w') || (*(atoms + indx) == 'r') || (*(atoms + indx) == 'h') || (*(atoms + indx) == 'm') || (*(atoms + indx) == 'i') || (*(atoms + indx) == '@') || (*(atoms + indx) == '[')){
@@ -289,6 +461,6 @@ void F(){
 
 int main(){
 	printf("MAIN\tindx -> %c\n",*(atoms + indx));
-	BP();
+	parser();
 	return 1;
 }

@@ -1,0 +1,54 @@
+$$Este es un programa de prueba
+ REAL  menu  ( )  [
+	ENT puntos, edad;
+	REAL altura, peso;
+	HAZ  [
+		ESCRIBE "Dime tu edad: ";
+ 		LEE edad;
+		ESCRIBE "Dime tu altura: ";
+		LEE altura;
+		@rangoedad(edad);
+		@ab();
+		ESCRIBE "Dime tu peso: ";
+		LEE peso;
+		@imc(altura MAS 1 DIVIDE 30, peso MENOS 5);
+		SI ( @imc( (altura DIVIDE 2) MAS 1, peso MULTIPLICA (2.0 DIVIDE 2.0), edad ) == @imc() ) [
+		]
+		SINO [ 
+		]
+		
+	] MIENTRAS (puntos>3);
+
+	MIENTRAS (@imc(altura) == @imc(altura)) 
+		ESCRIBE "Gracias";
+]
+
+REAL rangoedad ( ENT edad) [
+	SI (edad>=50 ) 	[
+		ESCRIBE "Eres adulto mayor";	
+	]
+	SINO [	
+		SI (edad<=20)
+			ESCRIBE "Eres adolescente";
+		SINO 
+			ESCRIBE "Eres adulto joven";	
+	]
+	puntos = puntos MAS 1;
+]
+
+ENT ab( REAL altura, ENT edad) [
+	SI (altura>=1.60)	
+		ESCRIBE "eres alto";
+	SINO		
+		ESCRIBE "eres bajo";
+	puntos =  puntos MAS 1;
+]
+
+
+imc (REAL peso, REAL altura) [
+	REAL imc;
+	imc= peso DIVIDE (altura MULTIPLICA altura); 
+	ESCRIBE "Tu IMC es:", imc;
+	puntos = puntos MAS 1;
+]
+

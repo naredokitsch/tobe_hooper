@@ -1,0 +1,31 @@
+$$Programa de prueba
+ENT principal()
+[
+   REAL x,y;
+   x=2.2;
+   y=x MENOS 5;
+   LEE y;
+   ESCRIBE "Valor de y es";
+   $$Código extra
+   
+   cadena = nada;
+   HAZ[ESCRIBE "a";]MIENTRAS(x>y);
+   
+   $$x = 1 MAS 3;
+   x = @a(a,a);
+   SI(a>b)
+	LEE a;
+  
+   SINO
+	ESCRIBE "HOLA";
+   
+   x = @ola();
+   @test();
+]
+  REAL otrafuncion() [ a=3;]
+$$Fin de programa
+
+
+
+
+

@@ -1,1 +1,3 @@
-0 "cadena5""cadena6"8 "cadena3"15simbolo_cuatrosimbolo_nuevesimbolo_dos"cadena9""cadena3""cadena4"0"cadena1"simbolo_seis"cadena8"simbolo_sietesimbolo_uno"cadena3"7"cadena2""cadena4"simbolo_siete430simbolo_uno"cadena2"4simbolo_uno"cadena2"simbolo_dos13simbolo_tres2simbolo_ochosimbolo_uno6"cadena9"t9"cadena6"simbolo_dos35"cadena8""cadena6"simbolo_tres3simbolo_cinco"cadena7""cadena7"simbolo_uno"cadena0"8simbolo_dossimbolo_siete"cadena3"simbolo_siete43simbolo_nueve7671"cadena8"3simbolo_cincosimbolo_ocho7simbolo_ocho3simbolo_ochosimbolo_tres"cadena0"4"cadena7""cadena4""cadena9"8simbolo_siete"cadena2"3"cadena2"
+0 "Hola, mundo"
+1 "x es menor que 50"
+2 "Nuevo valor de equis"

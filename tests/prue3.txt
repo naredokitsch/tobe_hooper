@@ -1,0 +1,20 @@
+ENT principal()
+[
+    REAL x, y;
+    x = 0;
+    y = x; 
+    ESCRIBE("Hola, mundo", y);
+
+    SI(x <= 50) [
+        ESCRIBE("x es menor que 50", x);
+    ] SINO [
+        LEE("Nuevo valor de equis");
+    ]
+
+    reloj = 60;
+    pi = 3.1426;
+    e = 2.17;
+
+    cadena = "Esto es una cadena";
+]
+

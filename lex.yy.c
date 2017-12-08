@@ -527,7 +527,38 @@ int *atoms = NULL;
 int atomsLength = 0;
 int atomsIndex = 0;
 float tokens_0 = 0;
+int indx = 0;
 int atoms_0 = 0;
+void F();
+void E();
+void E_();
+void T();
+void T_();
+void REL();
+void OR();
+void LP();
+void LPA();
+void A();
+void W();
+void R();
+void H();
+void M();
+void I();
+void BP();
+void PR();
+void PC();
+void S();
+void D();
+void L();
+void V();
+void C();
+void LD();
+void LA();
+void LAP();
+void FUN();
+void LF();
+void P();
+void errr();
 
 void insertToken(float clase,float tok){	 
     if (tokensLength == 0){
@@ -554,9 +585,6 @@ void insertToken(float clase,float tok){
 
 
 void insertAtom(int atm){
-	 
-	 printf("atoms_0 = %c\n", atoms_0);
-
     if (atomsLength == 0){
     	 atoms_0 = atm;
        atoms = (int*) calloc(1 , sizeof(*atoms));
@@ -958,15 +986,492 @@ void comment(char *comm){
 }
 
 void unrecogHandler(char *comm){
-//int i = 0;
-//printf("NO SE RECONOCE : ");
-//do{
-//    printf("%c",*(comm + i));
-//}while (*(comm + (i++)) != '\0');
-//printf("\n");
+int i = 0;
+printf("NO SE RECONOCE : ");
+do{
+    printf("%c",*(comm + i));
+}while (*(comm + (i++)) != '\0');
+printf("\n");
 }
 
-#line 970 "lex.yy.c"
+//////////PARSER//////////////
+
+void parser (){
+  P();
+    if ((*(atoms + indx) == '\0') || (*(atoms + indx + 1) == 0))
+    printf("\nCADENA RECONOCIDA SATISFACTORIAMENTE\n\n");
+  else {
+    printf("\nATOMOS OMITIDOS: ");
+    do{
+      printf("%x",*(atoms + indx));
+    }while(*(atoms + (indx++)) != '\0');
+    printf("\n\n");
+  }
+}
+///////////////////////////////////////////////////////////////////////////////////////
+void P(){
+  LF();
+}
+///////////////////////////////////////////////////////////////////////////////////////
+void LF(){
+  printf("%c  ->  <LF>\n",*(atoms + indx));
+  if ((*(atoms + indx) == 'a') || (*(atoms + indx) == 't') || (*(atoms + indx) == 'r')){
+    FUN();
+    LF();
+  }else{}
+}
+///////////////////////////////////////////////////////////////////////////////////////
+void FUN(){
+  printf("%c  ->  <FUN>\n",*(atoms + indx));
+  if ((*(atoms + indx) == 't') || (*(atoms + indx) == 'r')){
+    V();
+  }
+  if ((*(atoms + indx) == 'a') && (*(atoms + indx + 1) == '(')){
+    indx+=2;
+    LA();
+    if ((*(atoms + indx) == ')') && (*(atoms + indx + 1) == '[')){
+      indx+=2;
+      LD();
+      BP();
+      if (*(atoms + indx) == ']'){
+        indx++;
+        return;
+      }else{
+        printf("ERROR EN LA PRODUCCION <FUN> : SIMBOLO = %c\n",*(atoms + indx));
+        errr();
+      }
+    }else{
+      printf("ERROR EN LA PRODUCCION <FUN> : SIMBOLO = %c\n",*(atoms + indx));  
+      errr();
+    }
+  }else{
+      printf("ERROR EN LA PRODUCCION <FUN> : SIMBOLO = %c\n",*(atoms + indx));
+      errr();
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+void LA(){
+  printf("%c  ->  <LA>\n",*(atoms + indx));
+  if ((*(atoms + indx) == 't') || (*(atoms + indx) == 'r')){
+    V();
+    if (*(atoms + indx) == 'a'){
+      indx++;
+      LAP();
+      return;
+    }else{
+      printf("ERROR EN LA PRODUCCION <LA> : SIMBOLO = %c\n",*(atoms + indx));
+      errr();
+    }
+  }
+  else{}
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void LAP(){
+  printf("%c  ->  <LAP>\n",*(atoms + indx));
+  if (*(atoms + indx) == ','){
+    indx++;
+    V();
+    if (*(atoms + indx) == 'a'){
+      indx++;
+      LAP();
+      return;
+    }else{
+      printf("ERROR EN LA PRODUCCION <LAP> : SIMBOLO = %c\n",*(atoms + indx));
+      errr();
+    }
+    return;
+  }
+  else{}
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void LD(){
+  printf("%c  ->  <LD>\n",*(atoms + indx));
+  if ((*(atoms + indx) == 't') || (*(atoms + indx) == 'r')){
+    D();
+    LD();
+    return;
+  }
+  else{}
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void D(){
+  printf("%c  ->  D\n",*(atoms + indx));
+  if ((*(atoms + indx) == 't') || (*(atoms + indx) == 'r')){
+    V();
+    if (*(atoms + indx) == 'a'){
+      indx++;
+      C();
+      L();
+      return;
+    }else{
+      printf("ERROR EN LA PRODUCCION D : SIMBOLO = %c\n",*(atoms + indx));
+      errr();
+    }
+  }
+  else{
+    printf("ERROR EN LA PRODUCCION D : SIMBOLO = %c\n",*(atoms + indx));
+    errr();
+  }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void V(){
+  printf("%c  ->  V\n",*(atoms + indx));
+  if ((*(atoms + indx) == 't') || (*(atoms + indx) == 'r')){
+    indx++;
+    return;
+  }
+  else{
+    printf("ERROR EN LA PRODUCCION V : SIMBOLO = %c\n",*(atoms + indx));
+    errr();
+  }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void N(){
+  printf("%c  ->  N\n",*(atoms + indx));
+  if ((*(atoms + indx) == 'n') || (*(atoms + indx) == 'c')){
+    indx++;
+    return;
+  }
+  else{
+    printf("ERROR EN LA PRODUCCION N : SIMBOLO = %c\n",*(atoms + indx));
+    errr();
+  }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void C(){
+  printf("%c  ->  C\n",*(atoms + indx));
+  if (*(atoms + indx) == '='){
+    indx++;
+    N();
+    return;
+  }
+  else{}
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void L(){
+  printf("%c  ->  L\n",*(atoms + indx));
+  if ((*(atoms + indx) == ',') && (*(atoms + indx + 1) == 'a')){
+    indx+=2;
+    C();
+    L();
+    return;
+  }
+  if (*(atoms + indx) == ';'){
+    indx++;
+    return;
+  }
+  else{
+    printf("ERROR EN LA PRODUCCION L : SIMBOLO = %c\n",*(atoms + indx));
+    errr();
+  }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+
+void BP(){
+  printf("%c  ->  <BP>\n",*(atoms + indx));
+  if ((*(atoms + indx) == 'a') || (*(atoms + indx) == 'w') || (*(atoms + indx) == 'r') || (*(atoms + indx) == 'h') || (*(atoms + indx) == 'm') || (*(atoms + indx) == 'i') || (*(atoms + indx) == '@') || (*(atoms + indx) == '[')){
+    PR();
+    BP();
+    return;
+  }else{}
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void PR(){
+  printf("%c  ->  <PR>\n",*(atoms + indx));
+  if ((*(atoms + indx) == 'a') || (*(atoms + indx) == 'w') || (*(atoms + indx) == 'r') || (*(atoms + indx) == 'h') || (*(atoms + indx) == 'm') || (*(atoms + indx) == 'i') || (*(atoms + indx) == '@')){
+    S();
+    return;
+  }
+  if (*(atoms + indx) == '['){
+    PC();
+    return;
+  }
+  printf("ERROR EN LA PRODUCCION <PR> : SIMBOLO = %c\n",*(atoms + indx));
+  errr();
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void S(){
+  printf("%c  ->  S\n",*(atoms + indx));
+  if ((*(atoms + indx) == 'a') || (*(atoms + indx) == 'w') || (*(atoms + indx) == 'r') || (*(atoms + indx) == 'h') || (*(atoms + indx) == 'm') || (*(atoms + indx) == 'i') || (*(atoms + indx) == '@')){
+    if (*(atoms + indx) == 'a'){
+      A();
+      return;
+    }
+    if (*(atoms + indx) == 'w'){
+      W();
+      return;
+    }
+    if (*(atoms + indx) == 'r'){
+      R();
+      return;
+    }
+    if (*(atoms + indx) == 'h'){
+      H();
+      return;
+    }
+    if (*(atoms + indx) == 'm'){
+      M();
+      return;
+    }
+    if (*(atoms + indx) == 'i'){
+      I();
+      return;
+    }
+    if ((*(atoms + indx) == '@') && (*(atoms + indx + 1) == 'a') && (*(atoms + indx + 2) == '(')){
+      indx+=3;
+      LP();
+      if (*(atoms + indx) == ')'){
+        indx++;
+      }else{
+        printf("ERROR EN LA PRODUCCION S : SIMBOLO = %c\n",*(atoms + indx));
+        errr();
+      }
+      return;
+    }
+  }else{
+    printf("ERROR EN LA PRODUCCION S : SIMBOLO = %c\n",*(atoms + indx));
+    errr();
+  }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void PC(){
+  printf("%c  ->  <PC>\n",*(atoms + indx));
+  if (*(atoms + indx) == '['){
+    indx+=1;
+    BP();
+    if (*(atoms + indx) == ']'){
+      indx++;
+      return;
+    }else{
+      printf("ERROR EN LA PRODUCCION <PC> : SIMBOLO = %c\n",*(atoms + indx));
+      errr();
+    }
+  }else{
+    printf("ERROR EN LA PRODUCCION <PC> : SIMBOLO = %c\n",*(atoms + indx));
+    errr();
+  }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void A(){
+  printf("%c  ->  A\n",*(atoms + indx));
+  if ((*(atoms + indx) == 'a') && (*(atoms + indx + 1) == '=')){
+    indx+=2;
+    E();
+    if (*(atoms + indx) == ';'){
+      indx++;
+      return;
+    }else{
+      printf("ERROR EN LA PRODUCCIdfsdON A : SIMBOLO = %c\n",*(atoms + indx));
+      errr();
+    }
+  }else{
+    printf("ERROR EN LA PRODUCCION A : SIMBOLO = %c\n",*(atoms + indx));
+    errr();
+  }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void W(){
+  printf("%c  ->  W\n",*(atoms + indx));
+  if ((*(atoms + indx) == 'w') && (*(atoms + indx + 1) == 'a')){
+    indx+=2;
+    L();
+  }else{
+    printf("ERROR EN LA PRODUCCION W : SIMBOLO = %c\n",*(atoms + indx));
+    errr();
+  }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void R(){
+  printf("%c  ->  R\n",*(atoms + indx));
+  if ((*(atoms + indx) == 'r') && (*(atoms + indx + 1) == 'a')){
+    indx+=2;
+    L();
+  }else{
+    printf("ERROR EN LA PRODUCCION R : SIMBOLO = %c\n",*(atoms + indx));
+    errr();
+  }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void H(){
+  printf("%c  ->  H\n",*(atoms + indx));
+  if (*(atoms + indx) == 'h'){
+    indx++;
+    PC();
+    if ((*(atoms + indx) == 'm') && (*(atoms + indx + 1) == '(')){
+      indx+=2;
+      REL();
+      if ((*(atoms + indx) == ')') && (*(atoms + indx + 1) == ';')){
+        indx+=2;
+        return;
+      }else{
+        printf("ERROR EN LA PRODUCCION M : SIMBOLO = %c\n",*(atoms + indx));
+        errr();
+      }
+    }else{
+      printf("ERROR EN LA PRODUCCION M : SIMBOLO = %c\n",*(atoms + indx));
+      errr();
+    }
+  }else{
+    printf("ERROR EN LA PRODUCCION M : SIMBOLO = %c\n",*(atoms + indx));
+    errr();
+  }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void M(){
+  printf("%c  ->  M\n",*(atoms + indx));
+  if ((*(atoms + indx) == 'm') && (*(atoms + indx + 1) == '(')){
+    indx+=2;
+    REL();
+    if (*(atoms + indx) == ')'){
+      indx++;
+      PR();
+    }else{
+      printf("ERROR EN LA PRODUCCION M : SIMBOLO = %c\n",*(atoms + indx));
+      errr();
+    }
+  }else{
+    printf("ERROR EN LA PRODUCCION M : SIMBOLO = %c\n",*(atoms + indx));
+    errr();
+  }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void I(){
+  printf("%c  ->  I\n",*(atoms + indx));
+  if ((*(atoms + indx) == 'i') && (*(atoms + indx + 1) == '(')){
+    indx+=2;
+    REL();
+    if (*(atoms + indx) == ')'){
+      indx++;
+      PC();
+      if (*(atoms + indx) == 'e'){
+        indx++;
+        PC();
+        return;
+      }else{
+        printf("ERROR EN LA PRODUCCION I : SIMBOLO = %c\n",*(atoms + indx));
+        errr();
+      }
+    }else{
+      printf("ERROR EN LA PRODUCCION I : SIMBOLO = %c\n",*(atoms + indx));
+      errr();
+    }
+  }else{
+    printf("ERROR EN LA PRODUCCION I : SIMBOLO DE ENTRADA = %c\n",*(atoms + indx));
+    errr();
+  }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void REL(){
+  printf("%c  ->  <REL>\n",*(atoms + indx));
+  E();
+  OR();
+  E();
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void OR(){
+  printf("%c  ->  <BP>\n",*(atoms + indx));
+  if ((*(atoms + indx) == '>') || (*(atoms + indx) == 'g') || (*(atoms + indx) == '<') || (*(atoms + indx) == 'p') || (*(atoms + indx) == 'q') || (*(atoms + indx) == '!')){
+    indx++;
+    return;
+  }
+  printf("ERROR EN LA PRODUCCION <OR> : SIMBOLO DE ENTRADA = %c\n",*(atoms + indx));
+  errr();
+
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void LP(){
+  printf("%c  ->  <LP>\n",*(atoms + indx));
+  if ((*(atoms + indx) == '@') || (*(atoms + indx) == '(') || (*(atoms + indx) == 'a') || (*(atoms + indx) == 'n') || (*(atoms + indx) == 'c')){
+    E();
+    LPA();
+  }else{}
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void LPA(){
+  printf("%c  ->  <LPA>\n",*(atoms + indx));
+  if (*(atoms + indx) == ','){
+    indx++;
+    E();
+    LPA();
+  }else{}
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void E(){
+  printf("%c  ->  E\n",*(atoms + indx));
+  T();
+  E_();
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void E_(){
+  printf("%c  ->  E'\n",*(atoms + indx));
+  if ((*(atoms + indx) == '+') || (*(atoms + indx) == '-')){
+    indx++;
+    T();
+    E_();
+    return;
+  }else{}
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void T(){
+  printf("%c  ->  T\n",*(atoms + indx));
+  F();
+  T_();
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void T_(){
+  printf("%c  ->  T'\n",*(atoms + indx));
+  if ((*(atoms + indx) == '*') || (*(atoms + indx) == '/')){
+    indx++;
+    F();
+    T_();
+    return;
+  }else{}
+}
+////////////////////////////////////////////////////////////////////////////////////////
+void F(){
+  printf("%c  ->  F\n",*(atoms + indx));
+  if ((*(atoms + indx) == 'a') || (*(atoms + indx) == 'n') || (*(atoms + indx) == 'c')){
+    indx++;
+    return;
+  }
+  if ((*(atoms + indx) == '@') && (*(atoms + indx + 1) == 'a')){
+    indx+=2;
+    LP();
+    return;
+  }
+  if (*(atoms + indx) == '('){
+    indx++;
+    E();
+    if (*(atoms + indx) == ')'){
+      indx++;
+      return;
+    }
+  }
+  printf("ERROR EN LA PRODUCCION F : SIMBOLO DE ENTRADA = %c\n",*(atoms + indx));
+  errr();
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+void errr(){
+
+    printf("\n\n\nSE HA ENCONTRADO UN ERROR!!!!!!!. EJECUCION DETENIDA\n");
+    if(tokens != NULL)
+      free(tokens);
+    if(symbols != NULL)
+      free (symbols);
+    if(strings != NULL)
+      free(strings);
+
+    exit(0);
+
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+
+#line 1475 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -1148,9 +1653,9 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 485 "skener.l"
+#line 990 "skener.l"
 
-#line 1154 "lex.yy.c"
+#line 1659 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -1238,65 +1743,65 @@ case 1:
 (yy_c_buf_p) = yy_cp -= 1;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 486 "skener.l"
+#line 991 "skener.l"
 {comment(yytext);}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 487 "skener.l"
+#line 992 "skener.l"
 {insertString(yytext); insertAtom('s');}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 488 "skener.l"
+#line 993 "skener.l"
 {insertSymbol(yytext); insertAtom('a');}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 489 "skener.l"
+#line 994 "skener.l"
 {operadorRelacional(yytext);}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 490 "skener.l"
+#line 995 "skener.l"
 {insertToken(2,'='); insertAtom('=');}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 491 "skener.l"
+#line 996 "skener.l"
 {insertToken(5,*(yytext)); insertAtom(*(yytext));}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 492 "skener.l"
+#line 997 "skener.l"
 {operadorAritmetico(yytext);}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 493 "skener.l"
+#line 998 "skener.l"
 {palabraReservada(yytext);}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 494 "skener.l"
+#line 999 "skener.l"
 {insertToken(7,atof(yytext)); insertAtom('n');}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 495 "skener.l"
+#line 1000 "skener.l"
 {insertToken(6,atoi(yytext)); insertAtom('c');}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 496 "skener.l"
+#line 1001 "skener.l"
 {unrecogHandler(yytext);}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 497 "skener.l"
+#line 1002 "skener.l"
 ECHO;
 	YY_BREAK
-#line 1300 "lex.yy.c"
+#line 1805 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2293,11 +2798,11 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 497 "skener.l"
+#line 1002 "skener.l"
 
 
 int main(int argc,char *argv[]){
-    FILE *archivo_fuente = fopen("fuente.txt","r");
+    FILE *archivo_fuente = fopen(argv[1],"r");
     if (!archivo_fuente)
        printf("No se pudo cargar el archivo\n");
     yyin = archivo_fuente;
@@ -2306,11 +2811,18 @@ int main(int argc,char *argv[]){
     showTokenTable();
     showSymbolsTable();
     showStringsTable();
-    printf("\n\n");
-    free(tokens);
-    free (symbols);
-    free(strings);
     fclose(archivo_fuente);
+    printf("\n----------------\nEJECUCION PARSER\n----------------\n");
+    parser();
+    printf("\n\n");
+    if(tokens != NULL)
+      free(tokens);
+    if(symbols != NULL)
+      free (symbols);
+    if(strings != NULL)
+      free(strings);
+    
+    
     return 0;
 }
 

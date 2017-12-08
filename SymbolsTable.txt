@@ -1,5 +1,6 @@
-0 simbolo
-1 unosimbolo
-2 uno
-3 tsimbolo
-4 siete
+0 inicio
+1 y
+2 x
+3 reloj
+4 pi
+5 e

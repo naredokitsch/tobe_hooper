@@ -1,0 +1,14 @@
+ENT funcion (ENT var) [ 
+        ENT varf, vagr = 3 ; 
+        REAL var = 4.0, var ;
+
+	SI (vadr > vavr) [
+		vacr = 5.0;
+	]SINO[
+		vgar = 5.0;
+	]
+	 
+	HAZ [ 
+		vagr = 6;
+	] MIENTRAS (var == 8);
+]

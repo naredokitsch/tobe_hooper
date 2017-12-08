@@ -2,7 +2,8 @@
 ==PROGRAMA QUE TRADUCE UNA EXPRESION ARITMETICA
 ==A SU FORMA POLACA POSFIJA. ESTE PROGRAMA SOLO 
 ==ACEPTA LOS ATOMOS a,c,n,+,-,/,*,(,).
-==NO RECONOCE DOBLE PARENTESIS JUNTO.
+==SE TIENEN ALGUNOS INCONVENIENTES 
+==CON APERTUTURAS CONSECUTIVAS DE PARENTESIS.
 ==AUTOR: NOE MARTINEZ NAREDO
 */
 
@@ -63,12 +64,12 @@ void E_(){
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-void T(){///*
+void T(){/*
 	if (*(atoms + indx) == '\0')
 		printf("\$  ->  T\n");
 	else
 		printf("%c  ->  T\n",*(atoms + indx));
-	//*/
+	*/
 	F();
 	T_();
 }
@@ -76,13 +77,13 @@ void T(){///*
 void T_(){
 
 	char actChar = *(atoms + indx);
-	///*
+	/*
 	
 	if (actChar == '\0')
 		printf("\$  ->  T'\n");
 	else
 		printf("%c  ->  T'\n",actChar);
-	//*/
+	*/
 	if ((actChar == '*') || (actChar == '/')){
 		indx++;
 		//printf("dsfa");
