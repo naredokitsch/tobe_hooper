@@ -487,12 +487,14 @@ void comment(char *comm){
 }
 
 void unrecogHandler(char *comm){
-int i = 0;
-printf("NO SE RECONOCE : ");
-do{
-    printf("%c",*(comm + i));
-}while (*(comm + (i++)) != '\0');
-printf("\n");
+if(*comm != ' '){
+        int i = 0;
+        printf("NO SE RECONOCE : ");
+        do{
+            printf("%c",*(comm + i));
+        }while (*(comm + (i++)) != '\0');
+        printf("\n");
+    }
 }
 
 //////////PARSER//////////////
@@ -504,7 +506,7 @@ void parser (){
   else {
     printf("\nATOMOS OMITIDOS: ");
     do{
-      printf("%x",*(atoms + indx));
+      printf("%c",*(atoms + indx));
     }while(*(atoms + (indx++)) != '\0');
     printf("\n\n");
   }
@@ -954,6 +956,7 @@ void F(){
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
+
 
 void errr(){
 
