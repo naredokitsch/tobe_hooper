@@ -18,6 +18,8 @@ version 0.0
 #include <stdlib.h>
 int tokensLength = 0;
 float *tokens = NULL;
+int tiposLength = 0;
+float *tipos = NULL;
 int symbolsLength = 0;
 int *symbols = NULL;   
 int symQuantity = 0;
@@ -30,6 +32,7 @@ int atomsIndex = 0;
 float tokens_0 = 0;
 int indx = 0;
 int atoms_0 = 0;
+int tipos_0 = 0;
 void F();
 void E();
 void E_();
@@ -60,6 +63,7 @@ void FUN();
 void LF();
 void P();
 void errr();
+void imprime(char *cadena);
 
 void insertToken(float clase,float tok){	 
     if (tokensLength == 0){
@@ -105,6 +109,27 @@ void insertAtom(int atm){
     }
 }
 
+
+void insertTipo(int tip){
+    if (tiposLength == 0){
+    tipos_0 = tipo;
+       tipos = (int*) calloc(1 , sizeof(*tipos));
+          if (!tipos)
+              printf("Problems creating Tipos Table  (calloc)\n");
+       *(tipos) = tip;
+       tiposLength++;
+    }
+    else{ 
+       tiposLength++;
+       int *chk = (int*) realloc(tipos,tiposLength * sizeof(*chk));
+       if (!chk)
+          printf("Problems Moving Tipos Table (realloc)\n");
+       tipos = chk;
+       *(tipos + (tiposLength - 1)) = tip;
+       *tipos = tipos_0;
+    }
+}
+
 int compara(char *cad1,char *cad2){
     int i = 0;
     while((*(cad1 + i) != '\0') || *(cad2 + i) != '\0'){
@@ -123,21 +148,25 @@ void operadorAritmetico(char *op){
     if (compara(op,divide)){
         insertToken(4,0);
         insertAtom('/');
+        fprintf(objeto,"/");
         return;
        }
     if (compara(op,mas)){
         insertToken(4,1);
         insertAtom('+');
+        fprintf(objeto,"+");
         return;
        }
     if (compara(op,menos)){
         insertToken(4,2);
         insertAtom('-');
+        fprintf(objeto,"-");
         return;
        }
     if (compara(op,multiplica)){
         insertToken(4,3);
         insertAtom('*');
+        fprintf(objeto,"*");
         return;
        }
     return;
@@ -150,6 +179,7 @@ void operadorRelacional(char *op){
     char menosoigualque[] = {'<','=','\0'};
     char igual[] = {'=','=','\0'};
     char noigual[] = {'!','=','\0'};
+    fprintf(objeto,"%s",op);
     if (compara(op,masque)){
         insertToken(3,0);
         insertAtom('>');
@@ -192,6 +222,7 @@ void palabraReservada(char *op){
     char real[] = {'R','E','A','L','\0'};
     char si[] = {'S','I','\0'};
     char sino[] = {'S','I','N','O','\0'};
+    fprintf(objeto,"%s",op);
     if (compara(op,ent)){
         insertToken(1,0);
         insertAtom('t');
@@ -247,7 +278,6 @@ int *makeSymbolPointer(char *sym){
     for (i = 0; i < (symLength);i++)
        *(tmp + i + 1) = *(sym + i); 
    return(tmp);
-
 }
 
 int okInsertSymbol(int *findThis){
@@ -292,13 +322,12 @@ void insertSymbol(char *sym){
         do{}while(*(tmp + (tmpLength++)) != '\0');
         if (symQuantity == 0){
             symbols = (int*) calloc(tmpLength, sizeof(*symbols));
-           if (!symbols)
+            if (!symbols)
                printf("Problems Creating Symbol Table (calloc)\n");
             symbolsLength += tmpLength;
             symbols = tmp;
         }
-        else{ 
-            
+        else{         
             int *chk = realloc(symbols,(symbolsLength + tmpLength) * sizeof(*chk));
             if (!chk)
                printf("Problems moving Symbol Table (realloc)\n");
@@ -307,6 +336,7 @@ void insertSymbol(char *sym){
                *(symbols + symbolsLength + i) = *(tmp + i);
             symbolsLength+=tmpLength;
        }
+       insertTipo(*(atoms + atomsLength))
        insertToken(0,symQuantity++);
 
     }else{
@@ -961,6 +991,7 @@ void F(){
 void errr(){
 
     printf("\n\n\nSE HA ENCONTRADO UN ERROR!!!!!!!. EJECUCION DETENIDA\n");
+    fclose(objeto);
     if(tokens != NULL)
       free(tokens);
     if(symbols != NULL)
@@ -969,10 +1000,15 @@ void errr(){
       free(strings);
 
     exit(0);
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
+
+void imprimir(char *cadena){
+    char puntoguion[] = {';','\0'};
+    char cierracorchete[] = {']','\0'};
+    if((cadena == ) || () )
+}
 
 
 %}
@@ -1004,6 +1040,9 @@ nument {dignz}?{dig}*
 . {unrecogHandler(yytext);}
 %%
 int main(int argc,char *argv[]){
+    FILE *objeto = fopen("codigo_objeto.cfeliz","w");
+    if (!objeto)
+       printf("No se pudo abrir el archivo\n");
     FILE *archivo_fuente = fopen(argv[1],"r");
     if (!archivo_fuente)
        printf("No se pudo cargar el archivo\n");
@@ -1016,6 +1055,7 @@ int main(int argc,char *argv[]){
     fclose(archivo_fuente);
     printf("\n----------------\nEJECUCION PARSER\n----------------\n");
     parser();
+    fclose(objeto);
     printf("\n\n");
     if(tokens != NULL)
       free(tokens);
@@ -1023,7 +1063,5 @@ int main(int argc,char *argv[]){
       free (symbols);
     if(strings != NULL)
       free(strings);
-    
-    
     return 0;
 }
